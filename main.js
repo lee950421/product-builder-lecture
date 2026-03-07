@@ -28,3 +28,26 @@ function getNumberColor(number) {
         return '#b0d840'; // Green
     }
 }
+
+// Theme Toggle Logic
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+
+// Check for saved theme preference
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    body.classList.add('dark-mode');
+    themeToggle.textContent = '라이트 모드';
+}
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        themeToggle.textContent = '라이트 모드';
+    } else {
+        localStorage.setItem('theme', 'light');
+        themeToggle.textContent = '다크 모드';
+    }
+});
