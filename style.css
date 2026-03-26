@@ -53,35 +53,55 @@ body.dark-mode .animal-test-section p {
     color: #bbb;
 }
 
-#start-btn {
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.upload-btn {
     background-color: var(--primary-color);
     color: white;
     padding: 1rem 2rem;
-    border: none;
     border-radius: 10px;
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    margin-bottom: 2rem;
     transition: transform 0.2s, background-color 0.3s;
+    display: inline-block;
 }
 
-#start-btn:hover {
+.upload-btn:hover {
     background-color: #45a049;
     transform: scale(1.05);
 }
 
-#webcam-container {
+#image-preview-container {
+    width: 100%;
+    max-width: 300px;
+    min-height: 200px;
+    border: 2px dashed #ddd;
+    border-radius: 15px;
     display: flex;
     justify-content: center;
-    margin-bottom: 2rem;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    background-color: #fafafa;
 }
 
-#webcam-container canvas {
+body.dark-mode #image-preview-container {
+    background-color: #333;
+    border-color: #444;
+}
+
+#face-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     border-radius: 15px;
-    box-shadow: 0 4px 12px var(--shadow);
-    max-width: 100%;
-    height: auto;
 }
 
 #label-container {

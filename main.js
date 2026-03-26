@@ -1,30 +1,28 @@
 // Teachable Machine Logic
 const URL = "https://teachablemachine.withgoogle.com/models/55RpVuTm-/";
-let model, webcam, labelContainer, maxPredictions;
+let model, labelContainer, maxPredictions;
 
-async function init() {
-    const startBtn = document.getElementById('start-btn');
-    startBtn.textContent = '모델 로딩 중...';
-    startBtn.disabled = true;
+async function loadModel() {
+    if (!model) {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+    }
+}
 
-    const modelURL = URL + "model.json";
-    const metadataURL = URL + "metadata.json";
-
-    model = await tmImage.load(modelURL, metadataURL);
-    maxPredictions = model.getTotalClasses();
-
-    const flip = true;
-    webcam = new tmImage.Webcam(200, 200, flip);
-    await webcam.setup();
-    await webcam.play();
-    window.requestAnimationFrame(loop);
-
-    document.getElementById("webcam-container").appendChild(webcam.canvas);
-    labelContainer = document.getElementById("label-container");
+async function predict(imageElement) {
+    await loadModel();
+    const prediction = await model.predict(imageElement);
     
-    // Create bars for each class
+    // Clear previous results
+    labelContainer = document.getElementById("label-container");
+    labelContainer.innerHTML = '';
+    
     for (let i = 0; i < maxPredictions; i++) {
         const classTitle = model.getClassLabels()[i];
+        const probability = (prediction[i].probability * 100).toFixed(0);
+        
         const barWrapper = document.createElement("div");
         barWrapper.className = "result-bar-wrapper";
         
@@ -44,11 +42,11 @@ async function init() {
         
         const barFill = document.createElement("div");
         barFill.className = "bar-fill";
-        barFill.id = `bar-fill-${i}`;
+        barFill.style.width = probability + "%";
         
         const barPercent = document.createElement("div");
         barPercent.className = "bar-percent";
-        barPercent.id = `bar-percent-${i}`;
+        barPercent.textContent = probability + "%";
         
         barContainer.appendChild(barFill);
         barContainer.appendChild(barPercent);
@@ -56,29 +54,26 @@ async function init() {
         barWrapper.appendChild(barContainer);
         labelContainer.appendChild(barWrapper);
     }
-
-    startBtn.style.display = 'none';
 }
 
-async function loop() {
-    webcam.update();
-    await predict();
-    window.requestAnimationFrame(loop);
-}
+// File Upload Event
+document.getElementById('file-upload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-async function predict() {
-    const prediction = await model.predict(webcam.canvas);
-    for (let i = 0; i < maxPredictions; i++) {
-        const probability = (prediction[i].probability * 100).toFixed(0);
-        const barFill = document.getElementById(`bar-fill-${i}`);
-        const barPercent = document.getElementById(`bar-percent-${i}`);
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const imgElement = document.getElementById('face-image');
+        imgElement.src = event.target.result;
+        imgElement.style.display = 'block';
         
-        barFill.style.width = probability + "%";
-        barPercent.textContent = probability + "%";
-    }
-}
-
-document.getElementById('start-btn').addEventListener('click', init);
+        // Wait for image to load before predicting
+        imgElement.onload = function() {
+            predict(imgElement);
+        };
+    };
+    reader.readAsDataURL(file);
+});
 
 // Lotto Logic
 document.getElementById('generate-btn').addEventListener('click', () => {
