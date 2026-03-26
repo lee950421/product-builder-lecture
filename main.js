@@ -64,8 +64,11 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(event) {
         const imgElement = document.getElementById('face-image');
+        const placeholder = document.getElementById('upload-placeholder');
+        
         imgElement.src = event.target.result;
         imgElement.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
         
         // Wait for image to load before predicting
         imgElement.onload = function() {
