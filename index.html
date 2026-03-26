@@ -3,16 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로또 번호 추첨기</title>
+    <title>인공지능 동물상 테스트</title>
     <link rel="stylesheet" href="style.css">
+    <!-- TensorFlow.js and Teachable Machine Image library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>로또 번호 추첨기</h1>
-        <button id="generate-btn">번호 생성</button>
-        <div class="lotto-numbers-container" id="lotto-numbers">
-        </div>
-        <button id="theme-toggle">다크 모드</button>
+        <section class="animal-test-section">
+            <h1>인공지능 동물상 테스트</h1>
+            <p>나는 어떤 동물을 닮았을까? 지금 확인해보세요!</p>
+            <button id="start-btn" type="button">테스트 시작하기</button>
+            <div id="webcam-container"></div>
+            <div id="label-container">
+                <!-- Result bars will be injected here -->
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <section class="lotto-section">
+            <h2>로또 번호 추첨기</h2>
+            <button id="generate-btn">번호 생성</button>
+            <div class="lotto-numbers-container" id="lotto-numbers">
+            </div>
+            <button id="theme-toggle">다크 모드</button>
+        </section>
 
         <hr class="divider">
 
